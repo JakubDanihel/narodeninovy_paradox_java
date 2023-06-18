@@ -1,0 +1,86 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
+public class BirthdayParadox {
+
+    public static List<LocalDate> getBirthdays(int numberOfBirthdays) {
+        List<LocalDate> birthdays = new ArrayList<>();
+        LocalDate startOfYear = LocalDate.of(2001, 1, 1);
+
+        Random random = new Random();
+        for (int i = 0; i < numberOfBirthdays; i++) {
+            int randomNumberOfDays = random.nextInt(365);
+            LocalDate birthday = startOfYear.plusDays(randomNumberOfDays);
+            birthdays.add(birthday);
+        }
+
+        return birthdays;
+    }
+
+    public static LocalDate getMatch(List<LocalDate> birthdays) {
+        Set<LocalDate> uniqueBirthdays = new HashSet<>();
+        for (LocalDate birthday : birthdays) {
+            if (uniqueBirthdays.contains(birthday)) {
+                return birthday;
+            }
+            uniqueBirthdays.add(birthday);
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Birthday Paradox");
+
+        int numberOfBirthdays;
+        do {
+            System.out.println("How many birthdays shall I generate? (Max 100)");
+            numberOfBirthdays = Integer.parseInt(System.console().readLine());
+        } while (numberOfBirthdays <= 0 || numberOfBirthdays > 100);
+
+        System.out.println("Here are " + numberOfBirthdays + " birthdays:");
+        List<LocalDate> birthdays = getBirthdays(numberOfBirthdays);
+        for (int i = 0; i < birthdays.size(); i++) {
+            LocalDate birthday = birthdays.get(i);
+            if (i != 0) {
+                System.out.print(", ");
+            }
+            System.out.print(birthday.getMonth() + " " + birthday.getDayOfMonth());
+        }
+        System.out.println();
+
+        LocalDate match = getMatch(birthdays);
+
+        System.out.print("In this simulation, ");
+        if (match != null) {
+            System.out.println("multiple people have a birthday on " +
+                    match.getMonth() + " " + match.getDayOfMonth());
+        } else {
+            System.out.println("there are no matching birthdays.");
+        }
+
+        System.out.println();
+        System.out.println("Generating " + numberOfBirthdays + " random birthdays 100,000 times...");
+        System.console().readLine();
+
+        System.out.println("Let's run another 100,000 simulations.");
+        int simMatch = 0;
+        for (int i = 0; i < 100_000; i++) {
+            List<LocalDate> randomBirthdays = getBirthdays(numberOfBirthdays);
+            if (getMatch(randomBirthdays) != null) {
+                simMatch++;
+            }
+        }
+
+        System.out.println("100,000 simulations run.");
+        double probability = Math.round(simMatch / 100_000.0 * 100.0 * 100.0) / 100.0;
+        System.out.println("Out of 100,000 simulations of " + numberOfBirthdays + " people, there was a");
+        System.out.println("matching birthday in that group " + simMatch + " times. This means");
+        System.out.println("that " + numberOfBirthdays + " people have a " + probability + "% chance of");
+        System.out.println("having a matching birthday in their group.");
+        System.out.println("That's probably more than you would think!");
+    }
+}
