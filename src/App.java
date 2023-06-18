@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 public class App {
@@ -80,6 +79,7 @@ public class App {
         for(int i = 0; i < narodeniny.size(); i++){
             LocalDate narodenie = narodeniny.get(i);
 
+            //predelenie ked sa najdu rovnake datumy
             if(i != 0){
                 System.out.print(", ");
             }
@@ -101,6 +101,7 @@ public class App {
         //generovanie 100 000 simulacii s danym mnozstvom dat pre lepsiu statistiku
         int simRovnake = 0;
 
+        //prechadzanie a ratanie poctu kedy maju ludia narodeniny v ten isty den
         for(int i = 0; i < 100_000; i++){
             List<LocalDate> randomNarodeniny = getNarodeniny(pocetNarodenin);
 
@@ -112,7 +113,7 @@ public class App {
 
         //vypisanie hodnot
         System.out.println("100 000 simulacii prebehlo.");
-        double pravdepodobnost = Math.round((simRovnake / 100000.0) * 100.0 * 100.0) / 100.0;
+        double pravdepodobnost = Math.round((simRovnake / 100000.0) * 100.0 * 100.0) / 100.0; //statistika
 
         System.out.println("V 100 000 simulaciach pre " + pocetNarodenin + " narodenin ludi bolo " + simRovnake + " . ");
         System.out.println("Toto znamena ze " + pocetNarodenin + " ludi ma pravdepodobnost " + pravdepodobnost + " % ze budu mat narodeniny v rovnaky den. ");
